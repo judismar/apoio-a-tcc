@@ -1,17 +1,15 @@
-from re import search
-
 class Estudante:
     def __init__(self, nome, matricula):
-        if search("^[a-z]*$", nome) == None:
-             raise ValueError
+        if type(nome) != str:
+             raise NomeInvalido
               
         self._nome = nome
         if  type(matricula) != int:
-              raise ValueError
+              raise MatriculaInvalida
         else:
              self._mat = 'm' + str(matricula)
              if len(self._mat) != 9:
-                raise ErroNumMatricula
+                raise MatriculaInvalida
         self._cert = [None]*3
         self._contCertificado = 0   
     
@@ -20,14 +18,13 @@ class Estudante:
         if self._contCertificado > 2:
             raise ErroQtdCertificados
         if nota < 0 or nota > 10:
-            raise ValueError
+            raise NotaInvalida
         self._cert[self._contCertificado] = nota
         self._contCertificado += 1
 
     def computaMedia(self):
         if self._contCertificado != 3:
-            print("Erro. Faltam certificados")
-            return 0
+            raise ErroQtdCertificados
         soma = 0
         for nota in self._cert:
             soma += nota
@@ -38,7 +35,14 @@ class Estudante:
         print("Matrícula:", self._mat)
         print(self._cert)
 
-class ErroQtdCertificados(OverflowError):
+class ErroDeEstudante(Exception):
+    pass
+
+class ErroQtdCertificados(ErroDeEstudante):
 	pass
-class ErroNumMatricula(OverflowError):
+class MatriculaInvalida(ErroDeEstudante):
+	pass
+class NomeInvalido(ErroDeEstudante):
+	pass
+class NotaInvalida(ErroDeEstudante):
 	pass
