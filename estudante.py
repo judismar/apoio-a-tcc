@@ -1,7 +1,7 @@
 class Estudante:
     def __init__(self, nome, matricula):
         if type(nome) != str:
-             raise NomeInvalido
+             raise NomeInvalido 
               
         self._nome = nome
         if  type(matricula) != int:
